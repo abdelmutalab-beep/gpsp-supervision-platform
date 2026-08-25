@@ -4,7 +4,7 @@ window.GPSP_AUTH = (() => {
 
   function init(buttonId, onReady) {
     if (!cfg.GOOGLE_CLIENT_ID) {
-      console.error("GOOGLE_CLIENT_ID_NOT_CONFIGURED");
+      console.warn("GOOGLE_CLIENT_ID_NOT_CONFIGURED");
       return;
     }
 
@@ -13,6 +13,7 @@ window.GPSP_AUTH = (() => {
       callback: async (response) => {
         try {
           GPSP_API.setIdToken(response.credential);
+
           profile = await GPSP_API.me();
 
           if (typeof onReady === "function") {
@@ -43,11 +44,7 @@ window.GPSP_AUTH = (() => {
   function signOut() {
     profile = null;
     GPSP_API.setIdToken(null);
-
-    if (window.google && google.accounts && google.accounts.id) {
-      google.accounts.id.disableAutoSelect();
-    }
-
+    google.accounts.id.disableAutoSelect();
     location.reload();
   }
 

@@ -1,1 +1,76 @@
-window.GPSP_API=(()=>{const c=window.GPSP_CONFIG||{};async function r(a,p={}){if(!c.API_URL)throw new Error("API_URL_NOT_CONFIGURED");const u=new URL(c.API_URL);u.searchParams.set("action",a);Object.entries(p).forEach(([k,v])=>u.searchParams.set(k,v??""));const x=await fetch(u);if(!x.ok)throw new Error("HTTP_"+x.status);const d=await x.json();if(d&&d.error)throw new Error(d.error);return d;}return{dashboard:()=>r("dashboard"),studentWorkspace:id=>r("studentWorkspace",{studentId:id})};})();
+window.GPSP_API = (() => {
+  const cfg = window.GPSP_CONFIG || {};
+  let idToken = null;
+
+  function setIdToken(token) {
+    idToken = token || null;
+  }
+
+  function getIdToken() {
+    return idToken;
+  }
+
+  async function request(action, params = {}) {
+    if (!cfg.API_URL) {
+      throw new Error("API_URL_NOT_CONFIGURED");
+    }
+
+    if (!idToken) {
+      throw new Error("AUTH_REQUIRED");
+    }
+
+    const payload = {
+      action,
+      idToken,
+      ...params
+    };
+
+    const response = await fetch(cfg.API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payload),
+      redirect: "follow"
+    });
+
+    if (!response.ok) {
+      throw new Error("HTTP_" + response.status);
+    }
+
+    const result = await response.json();
+
+    if (!result.ok) {
+      throw new Error(result.error || "API_ERROR");
+    }
+
+    return result.data;
+  }
+
+  return {
+    setIdToken,
+    getIdToken,
+
+    me: () =>
+      request("me"),
+
+    dashboard: () =>
+      request("dashboard"),
+
+    studentWorkspace: (studentId) =>
+      request("studentWorkspace", { studentId }),
+
+    saveSupervisorNote: (studentId, note, part = "General") =>
+      request("saveSupervisorNote", {
+        studentId,
+        note,
+        part
+      }),
+
+    saveReview: (payload) =>
+      request("saveReview", payload),
+
+    saveMilestone: (payload) =>
+      request("saveMilestone", payload)
+  };
+})();

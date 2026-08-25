@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة المشرف | GPSP 2.0 Premium</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="topbar">
+  <div class="container nav">
+    <div class="brand"><div class="brand-mark">G</div><div><div class="brand-title">GPSP 2.0</div><div class="brand-sub">Supervisor Portal</div></div></div>
+    <nav class="navlinks"><a href="index.html">الرئيسية</a><a class="active" href="supervisor.html">المشرف</a><a href="student.html">الطالب</a></nav>
+    <div class="nav-actions"><span id="api-status" class="badge blue">جارٍ الاتصال</span></div>
+  </div>
+</header>
+
+<div class="dashboard-shell">
+  <aside class="sidebar">
+    <div class="side-caption">SUPERVISION</div>
+    <a class="side-link active" href="#overview">لوحة المتابعة</a>
+    <a class="side-link" href="#students">الطلاب</a>
+    <a class="side-link" href="#workspace">مساحة المشروع</a>
+    <div class="side-caption">ACADEMIC</div>
+    <a class="side-link" href="#submissions">التسليمات</a>
+    <a class="side-link" href="#ai">المراجعة الذكية</a>
+    <a class="side-link" href="#timeline">المواعيد</a>
+  </aside>
+
+  <main class="main">
+    <div class="page-head">
+      <div><h1>لوحة متابعة المشرف</h1><p>عرض مركزي لجميع مشاريع التخرج ومراحلها الحالية.</p></div>
+      <button class="btn primary" id="refresh-btn">تحديث البيانات</button>
+    </div>
+
+    <section id="overview" class="grid cols-4">
+      <div class="card"><div class="metric-label">إجمالي الطلاب</div><div class="metric-value" id="m-total">0</div><div class="metric-note">من Google Sheets</div></div>
+      <div class="card"><div class="metric-label">تحت المراجعة</div><div class="metric-value" id="m-review">0</div><div class="metric-note">تحتاج قرارًا</div></div>
+      <div class="card"><div class="metric-label">تحتاج تعديل</div><div class="metric-value" id="m-revision">0</div><div class="metric-note">متابعة مطلوبة</div></div>
+      <div class="card"><div class="metric-label">متوسط الإنجاز</div><div class="metric-value" id="m-progress">0%</div><div class="metric-note">جميع المشاريع</div></div>
+    </section>
+
+    <section class="card" id="students" style="margin-top:20px">
+      <div class="section-head">
+        <div><h2 style="font-size:22px">الطلاب والمشاريع</h2><p>اختر الطالب لفتح تفاصيل المشروع وسجل التسليمات.</p></div>
+        <span class="badge gray" id="student-count">0 طالب</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>الطالب</th><th>الرقم</th><th>العنوان</th><th>المرحلة</th><th>الإنجاز</th><th>الحالة</th><th></th></tr></thead>
+          <tbody id="students-body"><tr><td colspan="7" class="empty">جارٍ تحميل البيانات...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" id="workspace" style="margin-top:20px;display:none">
+      <div class="page-head">
+        <div><h1 id="ws-name" style="font-size:24px"></h1><p id="ws-title"></p></div>
+        <span id="ws-stage" class="badge blue"></span>
+      </div>
+      <div class="grid cols-2">
+        <div><h3 id="submissions">سجل التسليمات</h3><div id="ws-submissions" class="timeline"></div></div>
+        <div><h3>تغذية المشرف الراجعة</h3><div id="ws-reviews" class="timeline"></div></div>
+      </div>
+      <div id="ai" class="notice" style="margin-top:18px">سيتم تفعيل المراجعة بالذكاء الاصطناعي وقرارات الاعتماد تلقائيًا بعد اكتمال ربط الـAPI الخلفي.</div>
+    </section>
+  </main>
+</div>
+<script src="config.js"></script><script src="api.js"></script><script src="supervisor.js"></script>
+</body></html>
